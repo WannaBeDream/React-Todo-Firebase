@@ -1,4 +1,14 @@
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
+
+export function loginUser(login, pass) {
+    return auth.signInWithEmailAndPassword(login, pass).then( () => console.log("USER LOGGED IN")).catch( error => {
+        // Handle Errors here.
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        // ...
+        console.log(errorCode, errorMessage)
+    });
+};
 
 export function getLists() {
     return db.collection("lists")
@@ -70,12 +80,16 @@ export function deleteTodo(todoId) {
 }
 
 export function updateTodo(todoId, data) {
-  return  db.collection("todos").doc(todoId).update(data)
-        .then( () => ({
+    return db.collection("todos").doc(todoId).update(data)
+        .then(() => ({
             id: todoId,
             ...data
         })
         );
-    
+
 }
 
+
+export function onAuth(handleAuth) {
+    auth.onAuthStateChanged(handleAuth)
+}

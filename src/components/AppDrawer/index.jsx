@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {NavLink} from "react-router-dom";
 import {
   Drawer,
@@ -12,12 +12,14 @@ import {
   ListGroup,
   ListDivider
 } from "mdc-react";
-
+import  DataContext  from "./../../contexts/data";
 
 export default function AppDrawer({ lists }) {
+  const { state } = useContext(DataContext)
+
   return (
     <Drawer id="app-drawer">
-      <DrawerHeader title="React todo" />
+      <DrawerHeader title="React todo" subtitle={state.user ? state.user.email : ""}/>
       <DrawerContent>
         <ListGroup>
           <List>

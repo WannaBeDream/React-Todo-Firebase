@@ -3,17 +3,17 @@ import { Spinner, Layout, TopAppBar } from "mdc-react";
 import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
 import "./index.scss";
-import {  actions  } from "../store"
+import { actions } from "../store";
 import DataContext from "../contexts/data";
 import TodoDetails from "../components/TodoDetails";
 
 export default function TodoListPage({ match }) {
-  const {state, dispatch} = useContext(DataContext)
+  const { state, dispatch } = useContext(DataContext);
   const [selectedTodo, setSelectedTodo] = useState(null);
-console.log(state, 'STST')
+  console.log(state, "STST");
 
   useEffect(() => {
-    if(match.params.listId) {
+    if (match.params.listId) {
       actions.getListTodos(match.params.listId, dispatch);
     } else {
       actions.getTodos(dispatch);
@@ -21,10 +21,13 @@ console.log(state, 'STST')
   }, [dispatch, match.params.listId]);
 
   const handleSubmit = (title) => {
-    actions.createTodo({
-      title,
-      listId: list.id,
-    }, dispatch);
+    actions.createTodo(
+      {
+        title,
+        listId: list.id,
+      },
+      dispatch
+    );
   };
   const handleDelete = (todoId) => {
     actions.deleteTodo(todoId, dispatch);
@@ -33,7 +36,7 @@ console.log(state, 'STST')
     actions.updateTodo(todoId, data, dispatch);
   };
   const handleSelect = (todo) => {
-    setSelectedTodo(todo, dispatch);  // ?
+    setSelectedTodo(todo, dispatch); // ?
   };
 
   const list = state.lists.find((list) => list.id === match.params.listId);
@@ -41,8 +44,8 @@ console.log(state, 'STST')
   if (!list || !state.todos) return <Spinner />;
 
   return (
-    <Layout id="list-page" className="page" >
-    <TopAppBar title={list.title} />
+    <Layout id="list-page" className="page">
+      <TopAppBar title={list.title} />
       <Layout>
         <TodoList
           todos={state.todos}
@@ -53,7 +56,12 @@ console.log(state, 'STST')
         />
         <TodoForm onSubmit={handleSubmit} />
       </Layout>
-      {selectedTodo && <TodoDetails todo={selectedTodo} onClose={() => setSelectedTodo(null)}/>}
+      {selectedTodo && (
+        <TodoDetails
+          todo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
+        />
+      )}
     </Layout>
   );
 }
