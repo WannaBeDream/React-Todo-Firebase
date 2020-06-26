@@ -15,6 +15,21 @@ export function getLists() {
         });
 };
 
+export function getTodos() {
+    return db.collection("todos").where('listId', '==', '')
+        .get()
+        .then(snapshot => {
+            const items = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            return items;
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+};
+
 export function getListTodos(listId) {
     return db.collection("todos").where("listId", "==", listId)
         .get()
@@ -56,8 +71,11 @@ export function deleteTodo(todoId) {
 
 export function updateTodo(todoId, data) {
   return  db.collection("todos").doc(todoId).update(data)
-        .then( () => 
-            console.log("Document successfully updated!")
+        .then( () => ({
+            id: todoId,
+            ...data
+        })
         );
     
 }
+
