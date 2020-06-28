@@ -1,45 +1,44 @@
-import React from "react";
-import "./index.scss";
+import React from 'react';
 import {
-  Typography,
-  Layout,
-  Icon,
-  IconButton,
-  TextField,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemText,
-} from "mdc-react";
+    Checkbox,
+    Layout,
+    List, ListItem, ListItemText, ListItemGraphic,
+    TextField,
+    Typography
+} from 'mdc-react';
 
-const TodoDetails = ({ todo, onClose }) => {
-  return (
-    <aside className="todo-details">
-      <Layout row justifyContent="between">
-        <Typography>Детали задачи</Typography>
-        <IconButton onClick={onClose}>
-          <Icon>close</Icon>
-        </IconButton>
-      </Layout>
+import './index.scss';
 
-      <Layout>
-        <Layout row>
-          <Checkbox checked={todo.completed} onChange={() => {}} />
+export default function TodoDetails({ todo }) {
+    return (
+        <aside className="todo-details">
+            <Layout row>
+                <TextField
+                    label="Название"
+                    value={todo.title}
+                    onChange={() => {}}
+                />
+            </Layout>
 
-          <TextField fullWidth value={todo.title} onChange={() => {}} />
-        </Layout>
-        {todo.steps && todo.steps.length > 0 && (
-          <List>
-            {todo.steps.map((step, index) => (
-              <listItem key={index}>
-                <ListItemText>{step}</ListItemText>
-              </listItem>
-            ))}
-          </List>
-        )}
-      </Layout>
-    </aside>
-  );
-};
+            <section className="todo-steps">
+                <Typography variant="subtitle2" noMargin>Шаги</Typography>
 
-export default TodoDetails;
+                {todo.steps && todo.steps.length > 0 &&
+                    <List className="todo-step-list" dense>
+                        {todo.steps.map((step, index) =>
+                            <ListItem key={index}>
+                                <ListItemGraphic>
+                                    <Checkbox
+                                        checked={step.completed}
+                                    />
+                                </ListItemGraphic>
+
+                                <ListItemText>{step.title}</ListItemText>
+                            </ListItem>    
+                        )}
+                    </List>
+                }
+            </section>
+        </aside>
+    );
+}
